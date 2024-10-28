@@ -75,7 +75,7 @@ def get_quaternion_from_transformation_matrix(matrix):
     return quaternion
 
 class MavlinkSender(): 
-    def __init__(self, ip='udp:192.168.1.142:14551'):
+    def __init__(self, ip='udp:192.168.1.142:14551'): #your PC's ip
         self.ip = ip
         self.source_system = 254
         # Connect to the vehicle
