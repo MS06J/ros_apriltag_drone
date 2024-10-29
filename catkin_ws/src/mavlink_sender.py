@@ -130,8 +130,9 @@ class MavlinkSender():
         tag_offset = np.array([0, 0, 0]) #offset of tag w.r.t center of drone in m, in tag coordinate x,y,z direction
 
         #Three transformation matrixs needed
-        camera2tag=0
-        tag2drone=build_transformation_matrix(tag_offset, [0.5, 0.5, -0.5, -0.5])
+        camera2world=build_transformation_matrix([0,0,0], [0.5, 0.5, 0.5, 0.5])
+        tag2camera=0
+        drone2tag=build_transformation_matrix(tag_offset, [0.5, 0.5, 0.5, -0.5])
 
         connection = self.connection
         try:
@@ -147,12 +148,12 @@ class MavlinkSender():
 
             covariance = [0] * 21  # Covariance matrix (not used here)
 
-            camera2tag = build_transformation_matrix([x,y,z], q)
-            camera2drone = np.matmul(tag2drone, camera2tag)
-            q = get_quaternion_from_transformation_matrix(camera2drone)
-            x = camera2drone[0, 3]
-            y = camera2drone[1, 3]
-            z = camera2drone[2, 3]
+            tag2camera = build_transformation_matrix([x,y,z], q)
+            drone2world = np.matmul(np.matmul(drone2tag, tag2camera), camera2world)
+            q = get_quaternion_from_transformation_matrix(drone2world)
+            x = drone2world[0, 3]
+            y = drone2world[1, 3]
+            z = drone2world[2, 3]
 
             usec = int(time.time() * 1e6)  # Current time in microseconds
 

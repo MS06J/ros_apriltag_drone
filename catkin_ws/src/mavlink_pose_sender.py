@@ -5,7 +5,7 @@ from pose_listener import PoseListener
 
 
 
-sender = MavlinkSender('udp:192.168.0.246:14551')
+sender = MavlinkSender('udp:192.168.1.166:14551')
 
 sender.set_ekf_home()
 sender.set_home()
